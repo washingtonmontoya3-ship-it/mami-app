@@ -9,9 +9,9 @@ if (!supabaseUrl || !supabaseAnonKey) {
   );
 }
 
-// Cliente compartido: la app de mama lo usa anonimo (solo lee `people_public`
-// y `routine_blocks`), y el panel familiar lo usa autenticado tras el login
+// Cliente compartido: la app de mama lo usa anonimo (solo lee `people_public`),
+// y el panel familiar lo usa autenticado tras el login
 // (supabase.auth.signInWithPassword), lo que habilita el acceso completo a
-// `people`/`routine_blocks` y a subir archivos en Storage, segun las RLS de
+// `people` y a subir archivos en Storage, segun las RLS de
 // supabase/migrations/0001_init.sql y 0002_storage.sql.
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);

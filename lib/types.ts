@@ -12,16 +12,13 @@ export type PublicPerson = {
   display_order: number;
 };
 
-// Persona ya resuelta en el arbol, con su generacion respecto al hijo de
-// mama del que cuelga (0 = el hijo mismo, 1 = nieto/esposo, 2 = bisnieto...).
-export type TreePerson = PublicPerson & {
-  depth: number;
-};
-
+// Arbol en memoria: roots = hijos directos de mama (parent_id null).
+// childrenByParent permite navegar recursivamente, un nivel a la vez, sin
+// importar la profundidad real del arbol (hijo -> nieto -> bisnieto -> ...).
 export type FamilyTree = {
-  hijos: PublicPerson[];
+  roots: PublicPerson[];
   personById: Map<string, PublicPerson>;
-  descendantsByHijo: Map<string, TreePerson[]>;
+  childrenByParent: Map<string, PublicPerson[]>;
 };
 
 // Fila completa de la tabla `people`, solo para el panel familiar
@@ -41,23 +38,5 @@ export type AdminPerson = {
 };
 
 export type AdminPersonInput = Omit<AdminPerson, "id" | "display_order"> & {
-  display_order?: number;
-};
-
-// Fila de `routine_blocks`. No tiene datos sensibles, se lee y escribe igual
-// para la app de mama (solo lectura) y el panel (lectura/escritura).
-export type RoutineBlock = {
-  id: string;
-  time_label: string | null;
-  start_hour: number;
-  end_hour: number;
-  icon: string | null;
-  title: string;
-  description: string | null;
-  audio_url: string | null;
-  display_order: number;
-};
-
-export type RoutineBlockInput = Omit<RoutineBlock, "id" | "display_order"> & {
   display_order?: number;
 };

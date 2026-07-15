@@ -66,6 +66,14 @@ export async function uploadMedia(file: File, folder: "photos" | "audio"): Promi
   return data.publicUrl;
 }
 
+// Hijos directos de `parentId` (o los 14 hijos de mama si es null),
+// ordenados, para el navegador por "ventanas" del panel.
+export function getChildren(people: AdminPerson[], parentId: string | null): AdminPerson[] {
+  return people
+    .filter((p) => p.parent_id === parentId)
+    .sort((a, b) => a.display_order - b.display_order);
+}
+
 export type AdminTreeRow = {
   person: AdminPerson;
   depth: number;

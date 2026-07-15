@@ -1,5 +1,5 @@
 import { supabase } from "./supabase/client";
-import type { FamilyTree, PublicPerson, TreePerson } from "./types";
+import type { FamilyTree, PublicPerson } from "./types";
 
 export async function fetchAllActivePeople(): Promise<PublicPerson[]> {
   const { data, error } = await supabase
@@ -13,11 +13,9 @@ export async function fetchAllActivePeople(): Promise<PublicPerson[]> {
   return data ?? [];
 }
 
-// Arma el arbol en memoria a partir de la lista plana de personas activas.
-// - hijos: personas sin parent_id (hijos directos de mama), Nivel 1.
-// - descendantsByHijo[hijoId]: TODOS los descendientes de ese hijo
-//   (esposo/a, nietos, bisnietos, ...) aplanados en una sola lista para
-//   Nivel 2, sin importar cuantas generaciones tenga esa rama.
+// Arma el arbol en memoria a partir de la lista plana de personas activas:
+// agrupa por parent_id para poder navegar un nivel a la vez, sin importar
+// cuantas generaciones tenga cada rama.
 export function buildTree(people: PublicPerson[]): FamilyTree {
   const personById = new Map(people.map((p) => [p.id, p]));
 
@@ -32,33 +30,9 @@ export function buildTree(people: PublicPerson[]): FamilyTree {
     siblings.sort((a, b) => a.display_order - b.display_order);
   }
 
-  const hijos = people
+  const roots = people
     .filter((p) => !p.parent_id)
     .sort((a, b) => a.display_order - b.display_order);
 
-  const descendantsByHijo = new Map<string, TreePerson[]>();
-  for (const hijo of hijos) {
-    descendantsByHijo.set(hijo.id, flattenDescendants(hijo.id, childrenByParent));
-  }
-
-  return { hijos, personById, descendantsByHijo };
-}
-
-function flattenDescendants(
-  rootId: string,
-  childrenByParent: Map<string, PublicPerson[]>
-): TreePerson[] {
-  const result: TreePerson[] = [];
-  const queue: { id: string; depth: number }[] = [{ id: rootId, depth: 0 }];
-
-  while (queue.length > 0) {
-    const { id, depth } = queue.shift()!;
-    const children = childrenByParent.get(id) ?? [];
-    for (const child of children) {
-      result.push({ ...child, depth: depth + 1 });
-      queue.push({ id: child.id, depth: depth + 1 });
-    }
-  }
-
-  return result;
+  return { roots, personById, childrenByParent };
 }

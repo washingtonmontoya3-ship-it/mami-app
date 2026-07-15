@@ -9,6 +9,7 @@ import FileUploadField from "./FileUploadField";
 type PersonFormProps = {
   allPeople: AdminPerson[];
   initialValue?: AdminPerson;
+  defaultParentId?: string | null;
   onSaved: () => void;
   onCancel: () => void;
 };
@@ -16,12 +17,15 @@ type PersonFormProps = {
 export default function PersonForm({
   allPeople,
   initialValue,
+  defaultParentId,
   onSaved,
   onCancel,
 }: PersonFormProps) {
   const [name, setName] = useState(initialValue?.name ?? "");
   const [relation, setRelation] = useState(initialValue?.relation ?? "");
-  const [parentId, setParentId] = useState(initialValue?.parent_id ?? "");
+  const [parentId, setParentId] = useState(
+    initialValue?.parent_id ?? defaultParentId ?? ""
+  );
   const [phoneNumber, setPhoneNumber] = useState(initialValue?.phone_number ?? "");
   const [isActive, setIsActive] = useState(initialValue?.is_active ?? true);
   const [privateNote, setPrivateNote] = useState(initialValue?.private_note ?? "");

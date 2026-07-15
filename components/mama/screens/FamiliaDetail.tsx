@@ -1,21 +1,23 @@
 "use client";
 
-import type { TreePerson } from "@/lib/types";
+import type { PublicPerson } from "@/lib/types";
 import BackButton from "../BackButton";
 
-type FamiliaNivel3Props = {
-  person: TreePerson;
+type FamiliaDetailProps = {
+  person: PublicPerson;
   parentName?: string;
   onBack: () => void;
   onReplay: () => void;
 };
 
-export default function FamiliaNivel3({
+// Pantalla hoja: se muestra cuando la persona tocada no tiene hijos
+// cargados en el arbol.
+export default function FamiliaDetail({
   person,
   parentName,
   onBack,
   onReplay,
-}: FamiliaNivel3Props) {
+}: FamiliaDetailProps) {
   const relation = person.relation ?? "familiar";
 
   return (
