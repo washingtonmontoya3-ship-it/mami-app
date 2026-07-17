@@ -52,29 +52,41 @@ export default function BigCard({
       }`}
     >
       {photoUrl ? (
-        <div className="relative h-32 w-32 overflow-hidden rounded-full border-4 border-black">
+        <div className="relative h-36 w-36 overflow-hidden rounded-2xl border-4 border-black">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={photoUrl} alt="" className="h-full w-full object-cover" />
+          <div className="absolute inset-x-0 bottom-0 bg-black/70 px-1 py-1">
+            <span className="block truncate text-lg font-bold leading-tight text-white">
+              {label}
+            </span>
+          </div>
         </div>
       ) : (
-        <span className="text-6xl" aria-hidden>
-          {emoji ?? "👤"}
-        </span>
+        <>
+          <span className="text-6xl" aria-hidden>
+            {emoji ?? "👤"}
+          </span>
+          <span className="text-3xl font-bold leading-tight text-black">{label}</span>
+        </>
       )}
-      <span className="text-3xl font-bold leading-tight text-black">{label}</span>
 
-      {photoUrl ? (
-        <button
-          type="button"
-          onClick={handleZoomClick}
-          aria-label="Ver foto grande"
-          className="absolute -left-3 -top-3 flex h-20 w-20 items-center justify-center rounded-full border-4 border-black bg-white text-3xl shadow-lg active:scale-95"
-        >
-          🔍
-        </button>
+      {photoUrl || children ? (
+        <div className="flex w-full items-center justify-between">
+          <div>
+            {photoUrl ? (
+              <button
+                type="button"
+                onClick={handleZoomClick}
+                aria-label="Ver foto grande"
+                className="flex h-16 w-16 items-center justify-center rounded-full border-4 border-black bg-white text-3xl shadow-lg active:scale-95"
+              >
+                🔍
+              </button>
+            ) : null}
+          </div>
+          <div>{children}</div>
+        </div>
       ) : null}
-
-      {children}
 
       {photoExpanded && photoUrl ? (
         <PhotoViewer photoUrl={photoUrl} onClose={() => setPhotoExpanded(false)} />

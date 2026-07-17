@@ -22,7 +22,7 @@ export default function WhatsAppButton({ phoneNumber }: WhatsAppButtonProps) {
       rel="noopener noreferrer"
       onClick={handleClick}
       aria-label="Escribir por WhatsApp"
-      className="absolute -right-3 -top-3 flex h-20 w-20 items-center justify-center rounded-full border-4 border-black bg-green-500 text-4xl text-white shadow-lg active:scale-95"
+      className="flex h-16 w-16 items-center justify-center rounded-full border-4 border-black bg-green-500 text-3xl text-white shadow-lg active:scale-95"
     >
       💬
     </a>
