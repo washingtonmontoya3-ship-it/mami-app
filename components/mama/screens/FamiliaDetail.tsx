@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import type { PublicPerson } from "@/lib/types";
 import BackButton from "../BackButton";
 
@@ -18,6 +19,7 @@ export default function FamiliaDetail({
   onBack,
   onReplay,
 }: FamiliaDetailProps) {
+  const [expanded, setExpanded] = useState(false);
   const relation = person.relation ?? "familiar";
 
   return (
@@ -27,7 +29,18 @@ export default function FamiliaDetail({
       </div>
 
       {person.photo_url ? (
-        <div className="h-64 w-64 overflow-hidden rounded-full border-4 border-black shadow-lg">
+        <div
+          role="button"
+          tabIndex={0}
+          onClick={() => setExpanded(true)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              setExpanded(true);
+            }
+          }}
+          className="h-64 w-64 cursor-pointer overflow-hidden rounded-full border-4 border-black shadow-lg"
+        >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={person.photo_url} alt="" className="h-full w-full object-cover" />
         </div>
@@ -50,6 +63,30 @@ export default function FamiliaDetail({
       >
         🔊 Escuchar
       </button>
+
+      {expanded && person.photo_url ? (
+        <div
+          role="button"
+          tabIndex={0}
+          onClick={() => setExpanded(false)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " " || e.key === "Escape") {
+              setExpanded(false);
+            }
+          }}
+          className="fixed inset-0 z-[60] flex cursor-pointer flex-col items-center justify-center gap-6 bg-black p-6"
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={person.photo_url}
+            alt=""
+            className="max-h-[80vh] max-w-full rounded-2xl object-contain"
+          />
+          <span className="flex h-20 items-center gap-3 rounded-2xl border-4 border-white bg-black px-8 text-3xl font-bold text-white">
+            ✕ Cerrar
+          </span>
+        </div>
+      ) : null}
     </div>
   );
 }
