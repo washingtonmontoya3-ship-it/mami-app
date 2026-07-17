@@ -15,11 +15,9 @@ export default function WhatsAppButton({ phoneNumber }: WhatsAppButtonProps) {
     event.stopPropagation();
   }
 
-  const digits = phoneNumber.replace(/\D/g, "");
-
   return (
     <a
-      href={`https://wa.me/${digits}`}
+      href={`https://wa.me/${toWhatsAppNumber(phoneNumber)}`}
       target="_blank"
       rel="noopener noreferrer"
       onClick={handleClick}
@@ -29,4 +27,12 @@ export default function WhatsAppButton({ phoneNumber }: WhatsAppButtonProps) {
       💬
     </a>
   );
+}
+
+// wa.me exige el numero completo con codigo de pais, sin el 0 inicial que
+// se usa para marcar en Ecuador (ej. "0994237748" -> "593994237748"). Si el
+// numero ya viene con codigo de pais (no empieza en 0), se deja tal cual.
+function toWhatsAppNumber(phoneNumber: string): string {
+  const digits = phoneNumber.replace(/\D/g, "");
+  return digits.startsWith("0") ? `593${digits.slice(1)}` : digits;
 }
