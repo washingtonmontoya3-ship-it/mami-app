@@ -6,6 +6,26 @@ import { buildAdminOrder, createPerson, updatePerson } from "@/lib/peopleAdmin";
 import type { AdminPerson, AdminPersonInput } from "@/lib/types";
 import FileUploadField from "./FileUploadField";
 
+// Codigos de pais de la familia. Agregar mas paises acá si hace falta.
+const COUNTRY_CODES = [
+  { code: "593", label: "🇪🇨 Ecuador" },
+  { code: "34", label: "🇪🇸 España" },
+];
+
+// El numero se guarda siempre completo (codigo de pais + numero local, sin
+// 0 inicial ni espacios) para que wa.me lo reconozca sin adivinar. Esta
+// funcion separa un numero ya guardado en sus dos partes para editarlo; si
+// viene en formato local viejo (ej. "0994237748", de antes de este campo
+// existir) asume Ecuador y le saca el 0 inicial.
+function parsePhone(stored: string | null): { country: string; local: string } {
+  const digits = (stored ?? "").replace(/\D/g, "");
+  for (const { code } of COUNTRY_CODES) {
+    if (digits.startsWith(code)) return { country: code, local: digits.slice(code.length) };
+  }
+  if (digits.startsWith("0")) return { country: "593", local: digits.slice(1) };
+  return { country: "593", local: digits };
+}
+
 type PersonFormProps = {
   allPeople: AdminPerson[];
   initialValue?: AdminPerson;
@@ -26,7 +46,9 @@ export default function PersonForm({
   const [parentId, setParentId] = useState(
     initialValue?.parent_id ?? defaultParentId ?? ""
   );
-  const [phoneNumber, setPhoneNumber] = useState(initialValue?.phone_number ?? "");
+  const initialPhone = parsePhone(initialValue?.phone_number ?? null);
+  const [phoneCountry, setPhoneCountry] = useState(initialPhone.country);
+  const [phoneLocal, setPhoneLocal] = useState(initialPhone.local);
   const [isActive, setIsActive] = useState(initialValue?.is_active ?? true);
   const [privateNote, setPrivateNote] = useState(initialValue?.private_note ?? "");
   const [photoUrl, setPhotoUrl] = useState<string | null>(initialValue?.photo_url ?? null);
@@ -46,11 +68,12 @@ export default function PersonForm({
     setSaving(true);
     setError(null);
 
+    const cleanLocal = phoneLocal.replace(/\D/g, "");
     const input: AdminPersonInput = {
       name,
       relation: relation || null,
       parent_id: parentId || null,
-      phone_number: isHijoDirecto && phoneNumber ? phoneNumber : null,
+      phone_number: isHijoDirecto && cleanLocal ? `${phoneCountry}${cleanLocal}` : null,
       is_active: isActive,
       private_note: privateNote || null,
       photo_url: photoUrl,
@@ -114,13 +137,30 @@ export default function PersonForm({
 
       {isHijoDirecto ? (
         <label className="flex flex-col gap-1 text-sm font-medium">
-          Teléfono (para el botón de llamada)
-          <input
-            type="tel"
-            value={phoneNumber ?? ""}
-            onChange={(e) => setPhoneNumber(e.target.value)}
-            className="rounded-lg border border-gray-300 px-3 py-2 font-normal"
-          />
+          Teléfono (para el botón de WhatsApp)
+          <div className="flex gap-2">
+            <select
+              value={phoneCountry}
+              onChange={(e) => setPhoneCountry(e.target.value)}
+              className="rounded-lg border border-gray-300 px-3 py-2 font-normal"
+            >
+              {COUNTRY_CODES.map(({ code, label }) => (
+                <option key={code} value={code}>
+                  {label}
+                </option>
+              ))}
+            </select>
+            <input
+              type="tel"
+              value={phoneLocal}
+              onChange={(e) => setPhoneLocal(e.target.value)}
+              placeholder={phoneCountry === "593" ? "994237748" : "612345678"}
+              className="flex-1 rounded-lg border border-gray-300 px-3 py-2 font-normal"
+            />
+          </div>
+          <span className="text-xs font-normal text-gray-500">
+            Sin el 0 inicial ni espacios (solo los números).
+          </span>
         </label>
       ) : null}
 
