@@ -7,11 +7,7 @@ type PhotoViewerProps = {
   onClose: () => void;
 };
 
-// Overlay de foto a pantalla completa. Se cierra tocando en cualquier lado
-// o el boton "✕" de la esquina. Ese boton esta fijo a la esquina (no
-// adentro del contenido centrado) para que siempre se vea, incluso si la
-// foto es grande y en celulares chicos empujaria un boton "Cerrar" puesto
-// debajo de la imagen fuera de la pantalla.
+// Overlay de foto a pantalla completa. Se cierra tocando en cualquier lado.
 //
 // stopPropagation es necesario porque este componente se renderiza anidado
 // dentro de la tarjeta que abrio la foto (BigCard) — sin esto, el click de
@@ -47,15 +43,6 @@ export default function PhotoViewer({ photoUrl, onClose }: PhotoViewerProps) {
         draggable={false}
         className="pointer-events-none max-h-[85vh] max-w-full rounded-2xl object-contain"
       />
-
-      <button
-        type="button"
-        onClick={handleClose}
-        aria-label="Cerrar"
-        className="fixed right-4 top-4 z-[70] flex h-20 w-20 touch-manipulation items-center justify-center rounded-full border-4 border-white bg-black text-4xl text-white shadow-lg active:scale-95"
-      >
-        ✕
-      </button>
     </div>
   );
 }
