@@ -1,6 +1,8 @@
 "use client";
 
-import type { KeyboardEvent, ReactNode } from "react";
+import { useState } from "react";
+import type { KeyboardEvent, MouseEvent, ReactNode } from "react";
+import PhotoViewer from "./PhotoViewer";
 
 type BigCardProps = {
   label: string;
@@ -25,11 +27,18 @@ export default function BigCard({
   children,
   highlighted = false,
 }: BigCardProps) {
+  const [photoExpanded, setPhotoExpanded] = useState(false);
+
   function handleKeyDown(event: KeyboardEvent<HTMLDivElement>) {
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();
       onTap();
     }
+  }
+
+  function handleZoomClick(event: MouseEvent) {
+    event.stopPropagation();
+    setPhotoExpanded(true);
   }
 
   return (
@@ -53,7 +62,23 @@ export default function BigCard({
         </span>
       )}
       <span className="text-3xl font-bold leading-tight text-black">{label}</span>
+
+      {photoUrl ? (
+        <button
+          type="button"
+          onClick={handleZoomClick}
+          aria-label="Ver foto grande"
+          className="absolute -left-3 -top-3 flex h-20 w-20 items-center justify-center rounded-full border-4 border-black bg-white text-3xl shadow-lg active:scale-95"
+        >
+          🔍
+        </button>
+      ) : null}
+
       {children}
+
+      {photoExpanded && photoUrl ? (
+        <PhotoViewer photoUrl={photoUrl} onClose={() => setPhotoExpanded(false)} />
+      ) : null}
     </div>
   );
 }
