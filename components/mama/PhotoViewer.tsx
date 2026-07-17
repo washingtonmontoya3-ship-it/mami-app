@@ -16,6 +16,12 @@ type PhotoViewerProps = {
 // stopPropagation es necesario porque este componente se renderiza anidado
 // dentro de la tarjeta que abrio la foto (BigCard) — sin esto, el click de
 // cierre "se cuela" y tambien dispara la navegacion de esa tarjeta.
+//
+// pointer-events-none en la imagen (para que el toque siempre llegue al div
+// de afuera, no quede "atrapado" en un gesto de arrastrar/guardar imagen del
+// navegador del celular) + touch-manipulation (evita el retraso que esperan
+// los navegadores moviles por si el toque es un doble-tap de zoom) es lo que
+// hace que cerrar con un toque funcione de forma confiable en celulares.
 export default function PhotoViewer({ photoUrl, onClose }: PhotoViewerProps) {
   function handleClose(event: MouseEvent | KeyboardEvent) {
     event.stopPropagation();
@@ -32,20 +38,21 @@ export default function PhotoViewer({ photoUrl, onClose }: PhotoViewerProps) {
           handleClose(e);
         }
       }}
-      className="fixed inset-0 z-[60] flex cursor-pointer items-center justify-center overflow-auto bg-black/95 p-4"
+      className="fixed inset-0 z-[60] flex touch-manipulation cursor-pointer select-none items-center justify-center bg-black/95 p-4"
     >
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={photoUrl}
         alt=""
-        className="max-h-[85vh] max-w-full rounded-2xl object-contain"
+        draggable={false}
+        className="pointer-events-none max-h-[85vh] max-w-full rounded-2xl object-contain"
       />
 
       <button
         type="button"
         onClick={handleClose}
         aria-label="Cerrar"
-        className="fixed right-4 top-4 z-[70] flex h-20 w-20 items-center justify-center rounded-full border-4 border-white bg-black text-4xl text-white shadow-lg active:scale-95"
+        className="fixed right-4 top-4 z-[70] flex h-20 w-20 touch-manipulation items-center justify-center rounded-full border-4 border-white bg-black text-4xl text-white shadow-lg active:scale-95"
       >
         ✕
       </button>
