@@ -42,7 +42,7 @@ export default function PaginatedGrid<T>({
             aria-label="Pagina anterior"
             disabled={currentPage === 0}
             onClick={() => onPageChange(currentPage - 1)}
-            className="flex h-20 w-20 items-center justify-center rounded-full border-4 border-black bg-white text-4xl shadow-md disabled:opacity-30 active:scale-95"
+            className="flex h-20 w-20 items-center justify-center rounded-full border-4 border-white bg-blue-950 text-4xl text-white shadow-md disabled:opacity-30 active:scale-95"
           >
             ◀
           </button>
@@ -53,7 +53,7 @@ export default function PaginatedGrid<T>({
                 key={i}
                 aria-hidden
                 className={`h-4 w-4 rounded-full ${
-                  i === currentPage ? "bg-black" : "bg-black/25"
+                  i === currentPage ? "bg-white" : "bg-white/30"
                 }`}
               />
             ))}
@@ -64,7 +64,7 @@ export default function PaginatedGrid<T>({
             aria-label="Pagina siguiente"
             disabled={currentPage === totalPages - 1}
             onClick={() => onPageChange(currentPage + 1)}
-            className="flex h-20 w-20 items-center justify-center rounded-full border-4 border-black bg-white text-4xl shadow-md disabled:opacity-30 active:scale-95"
+            className="flex h-20 w-20 items-center justify-center rounded-full border-4 border-white bg-blue-950 text-4xl text-white shadow-md disabled:opacity-30 active:scale-95"
           >
             ▶
           </button>

@@ -47,12 +47,12 @@ export default function BigCard({
       tabIndex={0}
       onClick={onTap}
       onKeyDown={handleKeyDown}
-      className={`relative flex min-h-[220px] w-full cursor-pointer flex-col items-center justify-center gap-3 rounded-3xl border-4 bg-white p-4 text-center shadow-lg active:scale-[0.98] ${
-        highlighted ? "border-yellow-400 animate-gentle-glow" : "border-black"
+      className={`relative flex min-h-[220px] w-full cursor-pointer flex-col items-center justify-center gap-3 rounded-3xl border-4 bg-blue-950 p-4 text-center shadow-lg active:scale-[0.98] ${
+        highlighted ? "border-yellow-400 animate-gentle-glow" : "border-white"
       }`}
     >
       {photoUrl ? (
-        <div className="relative h-36 w-36 overflow-hidden rounded-2xl border-4 border-black">
+        <div className="relative h-36 w-36 overflow-hidden rounded-2xl border-4 border-white">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={photoUrl} alt="" className="h-full w-full object-cover" />
           <div className="absolute inset-x-0 bottom-0 bg-black/70 px-1 py-1">
@@ -66,7 +66,7 @@ export default function BigCard({
           <span className="text-6xl" aria-hidden>
             {emoji ?? "👤"}
           </span>
-          <span className="text-3xl font-bold leading-tight text-black">{label}</span>
+          <span className="text-3xl font-bold leading-tight text-white">{label}</span>
         </>
       )}
 

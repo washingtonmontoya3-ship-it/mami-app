@@ -26,10 +26,10 @@ export default function Gallery({ items, page, onPageChange, onBack }: GalleryPr
         </div>
       ) : null}
 
-      <h1 className="text-4xl font-bold">📷 Fotos y Videos</h1>
+      <h1 className="text-4xl font-bold text-white">📷 Fotos y Videos</h1>
 
       {items.length === 0 ? (
-        <p className="text-2xl text-black/70">Todavía no hay fotos ni videos cargados acá.</p>
+        <p className="text-2xl text-white/70">Todavía no hay fotos ni videos cargados acá.</p>
       ) : (
         <PaginatedGrid
           items={items}
@@ -65,7 +65,7 @@ function MemoryThumbnail({ item, onTap }: { item: Memory; onTap: () => void }) {
       tabIndex={0}
       onClick={onTap}
       onKeyDown={handleKeyDown}
-      className="flex min-h-[220px] w-full cursor-pointer flex-col items-center justify-center rounded-3xl border-4 border-black bg-white p-2 shadow-lg active:scale-[0.98]"
+      className="flex min-h-[220px] w-full cursor-pointer flex-col items-center justify-center rounded-3xl border-4 border-white bg-blue-950 p-2 shadow-lg active:scale-[0.98]"
     >
       <div className="relative h-48 w-full overflow-hidden rounded-2xl bg-black">
         {item.media_type === "video" ? (
@@ -90,7 +90,7 @@ function MemoryThumbnail({ item, onTap }: { item: Memory; onTap: () => void }) {
         ) : null}
       </div>
       {item.caption ? (
-        <p className="mt-2 line-clamp-2 text-xl font-semibold">{item.caption}</p>
+        <p className="mt-2 line-clamp-2 text-xl font-semibold text-white">{item.caption}</p>
       ) : null}
     </div>
   );

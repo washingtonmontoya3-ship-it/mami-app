@@ -35,10 +35,10 @@ export default function FamiliaList({
         </div>
       ) : null}
 
-      <h1 className="text-4xl font-bold">{title}</h1>
+      <h1 className="text-4xl font-bold text-white">{title}</h1>
 
       {people.length === 0 ? (
-        <p className="text-2xl text-black/70">Todavía no hay fotos cargadas acá.</p>
+        <p className="text-2xl text-white/70">Todavía no hay fotos cargadas acá.</p>
       ) : (
         <PaginatedGrid
           items={people}

@@ -40,7 +40,7 @@ export default function FamiliaDetail({
               setExpanded(true);
             }
           }}
-          className="h-64 w-64 cursor-pointer overflow-hidden rounded-full border-4 border-black shadow-lg"
+          className="h-64 w-64 cursor-pointer overflow-hidden rounded-full border-4 border-white shadow-lg"
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={person.photo_url} alt="" className="h-full w-full object-cover" />
@@ -51,8 +51,8 @@ export default function FamiliaDetail({
         </span>
       )}
 
-      <h1 className="text-5xl font-bold">{person.name}</h1>
-      <p className="text-3xl text-black/80">
+      <h1 className="text-5xl font-bold text-white">{person.name}</h1>
+      <p className="text-3xl text-white/80">
         Tu {relation}
         {parentName ? `, de ${parentName}` : ""}
       </p>

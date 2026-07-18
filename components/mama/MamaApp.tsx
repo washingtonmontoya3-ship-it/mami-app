@@ -76,7 +76,7 @@ export default function MamaApp() {
   if (error) {
     return (
       <Centered>
-        <p className="text-3xl font-semibold">No se pudo cargar tu familia.</p>
+        <p className="text-3xl font-semibold text-white">No se pudo cargar tu familia.</p>
         <button
           type="button"
           onClick={load}
@@ -91,7 +91,7 @@ export default function MamaApp() {
   if (!tree || !memories) {
     return (
       <Centered>
-        <p className="text-3xl font-semibold">Cargando tu familia...</p>
+        <p className="text-3xl font-semibold text-white">Cargando tu familia...</p>
       </Centered>
     );
   }
@@ -99,7 +99,7 @@ export default function MamaApp() {
   const current = stack[stack.length - 1];
 
   return (
-    <div className="flex min-h-screen w-full flex-col items-center bg-zinc-50">
+    <div className="flex min-h-screen w-full flex-col items-center bg-blue-950">
       <HomeButton onHome={goHome} />
       <GalleryButton onOpen={goToGallery} />
 
@@ -155,7 +155,7 @@ export default function MamaApp() {
 
 function Centered({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex min-h-screen w-full flex-col items-center justify-center gap-8 bg-zinc-50 px-6 text-center">
+    <div className="flex min-h-screen w-full flex-col items-center justify-center gap-8 bg-blue-950 px-6 text-center">
       {children}
     </div>
   );

@@ -12,7 +12,7 @@ export default function BackButton({ onBack, label = "Volver" }: BackButtonProps
     <button
       type="button"
       onClick={onBack}
-      className="ml-28 flex h-16 items-center gap-3 rounded-2xl border-4 border-black bg-white px-6 text-2xl font-bold shadow-md active:scale-95"
+      className="ml-28 flex h-16 items-center gap-3 rounded-2xl border-4 border-white bg-blue-950 px-6 text-2xl font-bold text-white shadow-md active:scale-95"
     >
       <span aria-hidden>⬅️</span>
       {label}
