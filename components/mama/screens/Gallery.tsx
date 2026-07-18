@@ -65,7 +65,7 @@ function MemoryThumbnail({ item, onTap }: { item: Memory; onTap: () => void }) {
       tabIndex={0}
       onClick={onTap}
       onKeyDown={handleKeyDown}
-      className="flex min-h-[220px] w-full cursor-pointer flex-col items-center justify-center rounded-3xl border-4 border-white bg-blue-950 p-2 shadow-lg active:scale-[0.98]"
+      className="flex min-h-[220px] w-full cursor-pointer flex-col items-center justify-center rounded-3xl bg-blue-950 p-2 shadow-lg active:scale-[0.98]"
     >
       <div className="relative h-48 w-full overflow-hidden rounded-2xl bg-black">
         {item.media_type === "video" ? (

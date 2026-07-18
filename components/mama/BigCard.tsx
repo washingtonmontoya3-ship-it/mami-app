@@ -47,8 +47,8 @@ export default function BigCard({
       tabIndex={0}
       onClick={onTap}
       onKeyDown={handleKeyDown}
-      className={`relative flex min-h-[220px] w-full cursor-pointer flex-col items-center justify-center gap-3 rounded-3xl border-4 bg-blue-950 p-4 text-center shadow-lg active:scale-[0.98] ${
-        highlighted ? "border-yellow-400 animate-gentle-glow" : "border-white"
+      className={`relative flex min-h-[220px] w-full cursor-pointer flex-col items-center justify-center gap-3 rounded-3xl bg-blue-950 p-4 text-center shadow-lg active:scale-[0.98] ${
+        highlighted ? "border-4 border-yellow-400 animate-gentle-glow" : ""
       }`}
     >
       {photoUrl ? (
