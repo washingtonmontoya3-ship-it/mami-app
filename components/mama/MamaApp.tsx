@@ -1,22 +1,27 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { fetchActiveMemories } from "@/lib/memories";
 import { buildTree, fetchAllActivePeople } from "@/lib/people";
-import type { FamilyTree, PublicPerson } from "@/lib/types";
+import type { FamilyTree, Memory, PublicPerson } from "@/lib/types";
 import { usePersonAudio } from "./AudioPlayer";
+import GalleryButton from "./GalleryButton";
 import HomeButton from "./HomeButton";
 import FamiliaDetail from "./screens/FamiliaDetail";
 import FamiliaList from "./screens/FamiliaList";
+import Gallery from "./screens/Gallery";
 
 type ListScreen = { kind: "list"; personId: string | null; page: number };
 type DetailScreen = { kind: "detail"; personId: string };
-type Screen = ListScreen | DetailScreen;
+type GalleryScreen = { kind: "gallery"; page: number };
+type Screen = ListScreen | DetailScreen | GalleryScreen;
 
 const ROOT_SCREEN: ListScreen = { kind: "list", personId: null, page: 0 };
 
 export default function MamaApp() {
   const [stack, setStack] = useState<Screen[]>([ROOT_SCREEN]);
   const [tree, setTree] = useState<FamilyTree | null>(null);
+  const [memories, setMemories] = useState<Memory[] | null>(null);
   const [error, setError] = useState(false);
   const { playFor, stop } = usePersonAudio();
 
@@ -27,8 +32,12 @@ export default function MamaApp() {
   function load() {
     setError(false);
     setTree(null);
-    fetchAllActivePeople()
-      .then((people) => setTree(buildTree(people)))
+    setMemories(null);
+    Promise.all([fetchAllActivePeople(), fetchActiveMemories()])
+      .then(([people, memoryItems]) => {
+        setTree(buildTree(people));
+        setMemories(memoryItems);
+      })
       .catch(() => setError(true));
   }
 
@@ -41,10 +50,14 @@ export default function MamaApp() {
     setStack((s) => (s.length > 1 ? s.slice(0, -1) : s));
   }
 
+  function goToGallery() {
+    setStack((s) => [...s, { kind: "gallery", page: 0 }]);
+  }
+
   function updateCurrentPage(page: number) {
     setStack((s) => {
       const top = s[s.length - 1];
-      if (top.kind !== "list") return s;
+      if (top.kind !== "list" && top.kind !== "gallery") return s;
       return [...s.slice(0, -1), { ...top, page }];
     });
   }
@@ -75,7 +88,7 @@ export default function MamaApp() {
     );
   }
 
-  if (!tree) {
+  if (!tree || !memories) {
     return (
       <Centered>
         <p className="text-3xl font-semibold">Cargando tu familia...</p>
@@ -88,6 +101,7 @@ export default function MamaApp() {
   return (
     <div className="flex min-h-screen w-full flex-col items-center bg-zinc-50">
       <HomeButton onHome={goHome} />
+      <GalleryButton onOpen={goToGallery} />
 
       {current.kind === "list" &&
         (() => {
@@ -126,6 +140,15 @@ export default function MamaApp() {
             />
           );
         })()}
+
+      {current.kind === "gallery" && (
+        <Gallery
+          items={memories}
+          page={current.page}
+          onPageChange={updateCurrentPage}
+          onBack={goBack}
+        />
+      )}
     </div>
   );
 }

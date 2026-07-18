@@ -5,10 +5,14 @@ import type { Session } from "@supabase/supabase-js";
 import { supabase } from "@/lib/supabase/client";
 import LoginForm from "./LoginForm";
 import LogoutButton from "./LogoutButton";
+import MemoriesPanel from "./MemoriesPanel";
 import PeoplePanel from "./PeoplePanel";
+
+type Tab = "personas" | "recuerdos";
 
 export default function PanelApp() {
   const [session, setSession] = useState<Session | null | undefined>(undefined);
+  const [tab, setTab] = useState<Tab>("personas");
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => setSession(data.session));
@@ -28,7 +32,38 @@ export default function PanelApp() {
         <LogoutButton />
       </div>
 
-      <PeoplePanel />
+      <div className="flex gap-2 border-b">
+        <TabButton active={tab === "personas"} onClick={() => setTab("personas")}>
+          Personas
+        </TabButton>
+        <TabButton active={tab === "recuerdos"} onClick={() => setTab("recuerdos")}>
+          Fotos y Videos
+        </TabButton>
+      </div>
+
+      {tab === "personas" ? <PeoplePanel /> : <MemoriesPanel />}
     </div>
+  );
+}
+
+function TabButton({
+  active,
+  onClick,
+  children,
+}: {
+  active: boolean;
+  onClick: () => void;
+  children: React.ReactNode;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={`px-4 py-2 text-sm font-semibold ${
+        active ? "border-b-2 border-black text-black" : "text-gray-500"
+      }`}
+    >
+      {children}
+    </button>
   );
 }

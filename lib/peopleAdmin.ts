@@ -57,7 +57,10 @@ async function nextDisplayOrder(parentId: string | null): Promise<number> {
   return (data?.[0]?.display_order ?? 0) + 1;
 }
 
-export async function uploadMedia(file: File, folder: "photos" | "audio"): Promise<string> {
+export async function uploadMedia(
+  file: File,
+  folder: "photos" | "audio" | "memories"
+): Promise<string> {
   const path = `${folder}/${crypto.randomUUID()}-${file.name}`;
   const { error } = await supabase.storage.from("media").upload(path, file);
   if (error) throw error;

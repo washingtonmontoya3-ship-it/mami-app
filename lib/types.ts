@@ -40,3 +40,31 @@ export type AdminPerson = {
 export type AdminPersonInput = Omit<AdminPerson, "id" | "display_order"> & {
   display_order?: number;
 };
+
+export type MediaType = "photo" | "video";
+
+// Forma expuesta por `memories_public`: foto/video suelto de la familia,
+// sin atar a una persona puntual del arbol.
+export type Memory = {
+  id: string;
+  media_url: string;
+  media_type: MediaType;
+  caption: string | null;
+  display_order: number;
+};
+
+// Fila completa de `memories`, solo para el panel (incluye is_active y
+// private_note, igual que AdminPerson/people).
+export type AdminMemory = {
+  id: string;
+  media_url: string;
+  media_type: MediaType;
+  caption: string | null;
+  is_active: boolean;
+  private_note: string | null;
+  display_order: number;
+};
+
+export type AdminMemoryInput = Omit<AdminMemory, "id" | "display_order"> & {
+  display_order?: number;
+};
